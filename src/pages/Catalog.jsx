@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Header, Skeleton } from '../components/layout';
+import { Header, Skeleton } from '../components/Layout';
 import { X, Smartphone } from 'lucide-react';
 import { GadgetCard, BrandCard } from '../components/Cards';
 

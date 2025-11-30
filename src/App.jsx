@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSupabase } from './hooks/useSupabase';
-import { Navbar } from './components/layout';
+import { Navbar } from './components/Layout';
 import HomePage from './pages/Home';
 import { CatalogPage, BrandsPage } from './pages/Catalog';
 import { ProfilePage, DetailPage } from './pages/Details';

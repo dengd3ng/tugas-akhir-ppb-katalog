@@ -1,4 +1,4 @@
-import { Header } from '../components/layout';
+import { Header } from '../components/Layout';
 import { ArrowLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
 

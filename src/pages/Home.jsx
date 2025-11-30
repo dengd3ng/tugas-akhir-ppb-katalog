@@ -1,6 +1,6 @@
 import React from 'react';
 import { Award, Smartphone, RefreshCw } from 'lucide-react';
-import { Section, AlertBox, Skeleton } from '../components/layout';
+import { Section, AlertBox, Skeleton } from '../components/Layout';
 import { GadgetCard, BrandItem } from '../components/Cards';
 
 export default function HomePage({ gadgets, brands, loading, offline, error, onRefresh, navTo, onDetail }) {
