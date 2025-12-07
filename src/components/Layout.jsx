@@ -2,25 +2,31 @@ import React from 'react';
 import { Home, Smartphone, Tag, User, Search, AlertCircle } from 'lucide-react';
 
 export const Navbar = ({ active, onNav }) => (
-  <nav className="fixed bottom-0 w-full bg-white border-t px-6 py-3 z-50 flex justify-around shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
-    <NavBtn icon={<Home />} label="Home" active={active === 'home'} onClick={() => onNav('home')} />
-    <NavBtn icon={<Smartphone />} label="Gadgets" active={active === 'gadgets'} onClick={() => onNav('gadgets')} />
-    <NavBtn icon={<Tag />} label="Brands" active={active === 'brands'} onClick={() => onNav('brands')} />
-    <NavBtn icon={<User />} label="Profil" active={active === 'profile'} onClick={() => onNav('profile')} />
+  <nav className="fixed bottom-0 w-full bg-white border-t px-4 py-2 z-50 flex justify-between items-center md:hidden shadow-[0_-6px_20px_rgba(15,23,42,0.06)]">
+    <div className="w-full flex justify-around">
+      <NavBtn icon={<Home />} label="Home" active={active === 'home'} onClick={() => onNav('home')} />
+      <NavBtn icon={<Smartphone />} label="Gadgets" active={active === 'gadgets'} onClick={() => onNav('gadgets')} />
+      <NavBtn icon={<Tag />} label="Brands" active={active === 'brands'} onClick={() => onNav('brands')} />
+      <NavBtn icon={<User />} label="Profil" active={active === 'profile'} onClick={() => onNav('profile')} />
+    </div>
   </nav>
 );
 
 const NavBtn = ({ icon, label, active, onClick }) => (
-  <button onClick={onClick} className={`flex flex-col items-center p-2 rounded-xl transition ${active ? 'text-indigo-600 -translate-y-1' : 'text-gray-400'}`}>
-    {React.cloneElement(icon, { size: 24 })}
-    <span className="text-[10px] font-bold mt-1">{label}</span>
+  <button
+    onClick={onClick}
+    className={`flex flex-col items-center justify-center p-2.5 rounded-lg transition-transform focus:outline-none ${active ? 'text-indigo-600 -translate-y-0.5' : 'text-gray-500'}`}
+    aria-pressed={active}
+  >
+    {React.cloneElement(icon, { size: 22 })}
+    <span className="text-[11px] font-semibold mt-1 hidden sm:block">{label}</span>
   </button>
 );
 
 export const Section = ({ title, icon, action, children }) => (
-  <div className="max-w-6xl mx-auto px-6 mb-8">
-    <div className="flex justify-between items-center mb-4">
-      <h2 className="font-bold text-xl flex items-center gap-2">{icon} {title}</h2>
+  <div className="max-w-6xl mx-auto px-4 sm:px-6 mb-8">
+    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-4">
+      <h2 className="font-bold text-lg sm:text-xl flex items-center gap-2">{icon} {title}</h2>
       {action}
     </div>
     {children}
@@ -28,18 +34,20 @@ export const Section = ({ title, icon, action, children }) => (
 );
 
 export const Header = ({ title, search, searchValue, onSearchChange }) => (
-  <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
-    <h2 className="text-3xl font-bold">{title}</h2>
-    {search && <div className="relative w-full md:w-80">
-      <Search className="absolute left-3 top-3 text-gray-400" size={20} />
-      <input
-        type="text"
-        placeholder="Cari gadget..."
-        className="w-full bg-white border border-gray-200 py-2.5 pl-10 rounded-xl focus:ring-2 focus:ring-indigo-500 shadow-sm"
-        value={searchValue}
-        onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
-      />
-    </div>}
+  <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
+    <h2 className="text-2xl sm:text-3xl font-bold">{title}</h2>
+    {search && (
+      <div className="relative w-full sm:w-80">
+        <Search className="absolute left-3 top-3 text-gray-400" size={18} />
+        <input
+          type="text"
+          placeholder="Cari gadget..."
+          className="w-full bg-white border border-gray-200 py-2.5 pl-10 pr-3 rounded-xl focus:ring-2 focus:ring-indigo-500 shadow-sm"
+          value={searchValue}
+          onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
+        />
+      </div>
+    )}
   </div>
 );
 
