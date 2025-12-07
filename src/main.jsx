@@ -9,11 +9,8 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 
-if ('serviceWorker' in navigator) {
-  const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1'
-  if (isLocalhost || (import.meta.env && import.meta.env.PROD)) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {})
-    })
-  }
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {})
+  })
 }

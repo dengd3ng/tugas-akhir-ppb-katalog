@@ -16,14 +16,24 @@ export const useSupabase = () => {
     }
 
     try {
-      const headers = { 'apikey': CONFIG.KEY, 'Authorization': `Bearer ${CONFIG.KEY}` };
+      const headers = { 
+        'apikey': CONFIG.KEY, 
+        'Authorization': `Bearer ${CONFIG.KEY}`,
+        'Content-Type': 'application/json'
+      };
       const cleanUrl = CONFIG.URL.replace(/\/$/, "");
 
-      const brandRes = await fetch(`${cleanUrl}/rest/v1/brands?select=*`, { headers });
-      if (!brandRes.ok) throw new Error("Gagal ambil data brands");
+      // Fetch brands
+      const brandRes = await fetch(`${cleanUrl}/rest/v1/brands`, { 
+        headers,
+        method: 'GET'
+      });
       
-      // Fetch Gadgets
-      let gadgetRes = await fetch(`${cleanUrl}/rest/v1/gadgets?select=*,categories(name),brands(name,country,website)`, { headers });
+      // Fetch gadgets with relations
+      let gadgetRes = await fetch(`${cleanUrl}/rest/v1/gadgets?select=*,categories(name),brands(name,country,website)`, { 
+        headers,
+        method: 'GET'
+      });
       let gadgetsData;
 
       if (gadgetRes.ok) {
@@ -31,12 +41,14 @@ export const useSupabase = () => {
         gadgetsData = json.map(i => ({
           ...i,
           category_name: i.categories?.name,
-          // Support multiple possible shapes: brand_name, brand, or nested brands.name
           brand_name: i.brand_name || i.brand || i.brands?.name || 'Unknown'
         }));
       } else {
-        // Fallback
-        gadgetRes = await fetch(`${cleanUrl}/rest/v1/gadgets?select=*`, { headers });
+        // Fallback to simple query
+        gadgetRes = await fetch(`${cleanUrl}/rest/v1/gadgets`, { 
+          headers,
+          method: 'GET'
+        });
         const json = await gadgetRes.json();
         gadgetsData = json.map(i => ({
           ...i,
