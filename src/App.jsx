@@ -3,7 +3,7 @@ import { useSupabase } from './hooks/useSupabase';
 import { Navbar } from './components/Layout';
 import HomePage from './pages/Home';
 import { CatalogPage, BrandsPage } from './pages/Catalog';
-import { ProfilePage, DetailPage } from './pages/Details';
+import * as Details from './pages/Details';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -73,8 +73,8 @@ export default function App() {
         case 'brands': return (
           <BrandsPage brands={brands} loading={loading} onBrandClick={handleBrandClick} />
         );
-        case 'profile': return <ProfilePage offline={offline} />;
-        case 'detail': return <DetailPage data={detail} onBack={() => go('gadgets')} />;
+        case 'profile': return <Details.ProfilePage offline={offline} />;
+        case 'detail': return <Details.DetailPage data={detail} onBack={() => go('gadgets')} />;
         default: return <div style={{ padding: '20px', textAlign: 'center' }}>Loading...</div>;
       }
     } catch (err) {
