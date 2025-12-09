@@ -143,7 +143,11 @@ const NegotiationSection = ({ itemId }) => {
       if (!hasBackend) return loadNegotiations(itemId);
 
       const res = await fetch(`${cleanUrl}/rest/v1/offers?item_id=eq.${encodeURIComponent(itemId)}&order=created_at.desc`, { headers });
-      if (!res.ok) throw new Error('Network response was not ok');
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        console.error('fetchOffers error', res.status, text);
+        throw new Error(`Failed to load offers (${res.status})`);
+      }
       return await res.json();
     } catch (error) {
       console.error("Gagal mengambil offers:", error);
@@ -158,7 +162,13 @@ const NegotiationSection = ({ itemId }) => {
         headers, 
         body: JSON.stringify(payload) 
       });
-      return res.ok;
+      if (!res.ok) {
+        const body = await res.text().catch(() => '');
+        console.error('postOffer failed', res.status, body);
+        return { ok: false, status: res.status, body };
+      }
+      const json = await res.json().catch(() => null);
+      return { ok: true, status: res.status, body: json };
     } catch (e) { return false; }
   };
 
@@ -169,7 +179,12 @@ const NegotiationSection = ({ itemId }) => {
         headers, 
         body: JSON.stringify({ status: newStatus }) 
       });
-      return res.ok;
+      if (!res.ok) {
+        const body = await res.text().catch(() => '');
+        console.error('patchStatus failed', res.status, body);
+        return false;
+      }
+      return true;
     } catch (e) { return false; }
   };
 
@@ -179,7 +194,12 @@ const NegotiationSection = ({ itemId }) => {
         method: 'DELETE', 
         headers 
       });
-      return res.ok;
+      if (!res.ok) {
+        const body = await res.text().catch(() => '');
+        console.error('deleteOffer failed', res.status, body);
+        return false;
+      }
+      return true;
     } catch (e) { return false; }
   };
 
@@ -216,13 +236,15 @@ const NegotiationSection = ({ itemId }) => {
 
     if (hasBackend) {
       setLoading(true);
-      const success = await postOffer(newOffer);
-      if (success) {
+      const result = await postOffer(newOffer);
+      if (result && result.ok) {
         await refreshData();
         setMessage('');
         setPrice('');
       } else {
-        alert("Gagal mengirim data ke server.");
+        console.error('postOffer result', result);
+        const errMsg = result && result.body ? (typeof result.body === 'string' ? result.body : JSON.stringify(result.body)) : 'Gagal mengirim data ke server.';
+        alert(`Gagal mengirim data ke server. (${result?.status || 'no-status'})\n${errMsg}`);
       }
       setLoading(false);
     } else {
