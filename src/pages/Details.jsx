@@ -329,5 +329,4 @@ export const ProfilePage = ({ offline }) => {
   );
 };
 
-  // Ensure named exports are visible to bundlers (Rollup/Vercel)
-  export { DetailPage, ProfilePage };
+  // Exports are declared inline above as named exports; no extra export statement needed.
