@@ -2,7 +2,8 @@ import React from 'react';
 import { Home, Smartphone, Tag, User, Search, AlertCircle } from 'lucide-react';
 
 export const Navbar = ({ active, onNav }) => (
-  <nav className="fixed bottom-0 w-full bg-white border-t px-4 py-2 z-50 flex justify-between items-center md:hidden shadow-[0_-6px_20px_rgba(15,23,42,0.06)]">
+  // SAYA MENGHAPUS 'md:hidden' DI BAWAH INI
+  <nav className="fixed bottom-0 w-full bg-white border-t px-4 py-2 z-50 flex justify-between items-center shadow-[0_-6px_20px_rgba(15,23,42,0.06)]">
     <div className="w-full flex justify-around">
       <NavBtn icon={<Home />} label="Home" active={active === 'home'} onClick={() => onNav('home')} />
       <NavBtn icon={<Smartphone />} label="Gadgets" active={active === 'gadgets'} onClick={() => onNav('gadgets')} />
@@ -10,17 +11,6 @@ export const Navbar = ({ active, onNav }) => (
       <NavBtn icon={<User />} label="Profil" active={active === 'profile'} onClick={() => onNav('profile')} />
     </div>
   </nav>
-);
-
-const NavBtn = ({ icon, label, active, onClick }) => (
-  <button
-    onClick={onClick}
-    className={`flex flex-col items-center justify-center p-2.5 rounded-lg transition-transform focus:outline-none ${active ? 'text-indigo-600 -translate-y-0.5' : 'text-gray-500'}`}
-    aria-pressed={active}
-  >
-    {React.cloneElement(icon, { size: 22 })}
-    <span className="text-[11px] font-semibold mt-1 hidden sm:block">{label}</span>
-  </button>
 );
 
 export const Section = ({ title, icon, action, children }) => (
@@ -63,4 +53,15 @@ export const Skeleton = ({ count, type }) => (
       <div key={i} className={`bg-gray-200 animate-pulse rounded-2xl ${type === 'list' ? 'h-24' : 'aspect-[4/5]'}`} />
     ))}
   </>
+);
+// Paste ini di bagian bawah file Layout.jsx, atau di bawah komponen Navbar
+const NavBtn = ({ icon, label, active, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`flex flex-col items-center justify-center p-2.5 rounded-lg transition-transform focus:outline-none ${active ? 'text-indigo-600 -translate-y-0.5' : 'text-gray-500'}`}
+    aria-pressed={active}
+  >
+    {React.cloneElement(icon, { size: 22 })}
+    <span className="text-[11px] font-semibold mt-1 hidden sm:block">{label}</span>
+  </button>
 );
