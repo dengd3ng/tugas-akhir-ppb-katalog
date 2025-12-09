@@ -23,40 +23,55 @@ export const useSupabase = () => {
       };
       const cleanUrl = CONFIG.URL.replace(/\/$/, "");
 
-      // Fetch brands
+      // 1. Fetch Brands
       const brandRes = await fetch(`${cleanUrl}/rest/v1/brands`, { 
         headers,
         method: 'GET'
       });
       
-      // Fetch gadgets with relations
-      let gadgetRes = await fetch(`${cleanUrl}/rest/v1/gadgets?select=*,categories(name),brands(name,country,website)`, { 
+      // 2. Fetch Gadgets (SUDAH DIPERBAIKI: Hapus relasi categories, cukup ambil brands)
+      let gadgetRes = await fetch(`${cleanUrl}/rest/v1/gadgets?select=*,brands(name,country,website)`, { 
         headers,
         method: 'GET'
       });
+
       let gadgetsData;
 
       if (gadgetRes.ok) {
+        // --- SKENARIO SUKSES ---
         const json = await gadgetRes.json();
-        gadgetsData = json.map(i => ({
-          ...i,
-          category_name: i.categories?.name,
-          brand_name: i.brand_name || i.brand || i.brands?.name || 'Unknown'
-        }));
+        gadgetsData = json.map(i => {
+          // Handle brands jika bentuknya array
+          const brandData = Array.isArray(i.brands) ? i.brands[0] : i.brands;
+          
+          return {
+            ...i,
+            // Perbaikan: Ambil langsung dari kolom text 'category', bukan relasi object
+            category_name: i.category || 'Gadget', 
+            brand_name: brandData?.name || 'Unknown'
+          };
+        });
       } else {
-        // Fallback to simple query
-        gadgetRes = await fetch(`${cleanUrl}/rest/v1/gadgets`, { 
+        // --- SKENARIO GAGAL (Fallback) ---
+        // Jika query relasi gagal, coba ambil data gadget polos tanpa join
+        const fallbackRes = await fetch(`${cleanUrl}/rest/v1/gadgets`, { 
           headers,
           method: 'GET'
         });
-        const json = await gadgetRes.json();
-        gadgetsData = json.map(i => ({
-          ...i,
-          category_name: 'Gadget',
-          brand_name: i.brand_name || i.brand || 'Unknown'
-        }));
+        
+        if (fallbackRes.ok) {
+          const json = await fallbackRes.json();
+          gadgetsData = json.map(i => ({
+            ...i,
+            category_name: i.category || 'Gadget',
+            brand_name: 'Unknown' // Tidak ada join, jadi unknown
+          }));
+        } else {
+           throw new Error("Gagal mengambil data gadget");
+        }
       }
 
+      // 3. Proses Data Brand
       const brandJson = await brandRes.json();
       if (!brandJson || (Array.isArray(brandJson) && brandJson.length === 0)) {
         setData({ gadgets: gadgetsData, brands: MOCK_BRANDS });
@@ -67,6 +82,7 @@ export const useSupabase = () => {
       }
 
     } catch (err) {
+      console.error("Fetch Error:", err);
       setData({ gadgets: MOCK_GADGETS, brands: MOCK_BRANDS });
       setStatus({ loading: false, error: err.message, offline: true });
     }

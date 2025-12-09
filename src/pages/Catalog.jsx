@@ -6,9 +6,18 @@ import { GadgetCard, BrandCard } from '../components/Cards';
 export const CatalogPage = ({ gadgets = [], loading, onDetail, activeBrand, onClearBrand }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredGadgets = gadgets.filter((item) => {
+const filteredGadgets = gadgets.filter((item) => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesBrand = activeBrand ? (item.brand_name && item.brand_name.toLowerCase() === activeBrand.toLowerCase()) : true;
+    
+    // PERBAIKAN DISINI:
+    // Cek item.brands.name (struktur default Supabase) ATAU item.brand_name (jaga-jaga)
+    const brandName = item.brands?.name || item.brand_name; 
+    
+    // ... di dalam CatalogPage
+const matchesBrand = activeBrand 
+  ? (item.brand_name && item.brand_name.toLowerCase() === activeBrand.toLowerCase()) 
+  : true;
+
     return matchesSearch && matchesBrand;
   });
 

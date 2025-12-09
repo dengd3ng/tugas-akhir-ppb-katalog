@@ -1,15 +1,19 @@
-// Konfigurasi Supabase
-export const CONFIG = {
-  // Masukkan URL dan Anon Key ASLI dari Dashboard Supabase Anda di sini
-  URL: 'https://ntlwfiohaxgchqepipbk.supabase.co',
-  KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50bHdmaW9oYXhnY2hxZXBpcGJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzODI3MjgsImV4cCI6MjA3OTk1ODcyOH0.ksPiluuUAqXcoXrgb2NN6Bcae9f7dYm8-7NqAQt28j4'
+// src/config.js
+const config = {
+  // Mengambil variable dari .env
+  URL: import.meta.env.VITE_SUPABASE_URL,
+  KEY: import.meta.env.VITE_SUPABASE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY,
 };
 
-// Data Dummy (Mock Data)
+// Log untuk ngecek apakah kunci terbaca atau tidak di Console browser
+console.log("Cek Config:", config); 
+
+export const CONFIG = config;
+
+// Data Mock (Biarkan di bawah sini)
 export const MOCK_GADGETS = [
-  { id: '1', name: 'iPhone 15 Pro', price: 19500000, category_name: 'Smartphone' },
-  { id: '2', name: 'Samsung S24 Ultra', price: 21999000, category_name: 'Smartphone' },
-  { id: '3', name: 'MacBook Air M2', price: 16999000, category_name: 'Laptop' },
+  { id: '1', name: 'iPhone 15 Pro (Mock)', price: 19500000, category_name: 'Smartphone' },
+  { id: '2', name: 'Samsung S24 Ultra (Mock)', price: 21999000, category_name: 'Smartphone' },
 ];
 
 export const MOCK_BRANDS = [
