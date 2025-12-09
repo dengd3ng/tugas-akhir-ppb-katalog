@@ -51,7 +51,7 @@ const resolveImageSrc = (item) => {
   return src;
 };
 
-export const DetailPage = ({ data, onBack }) => {
+const DetailPage = ({ data, onBack }) => {
   if (!data) return null;
   const { item, type } = data;
 
@@ -287,7 +287,7 @@ const NegotiationSection = ({ itemId }) => {
   );
 };
 
-export const ProfilePage = ({ offline }) => {
+const ProfilePage = ({ offline }) => {
   const [profile, setProfile] = useState({ name: 'Denzel Helguera Simanjuntak', nim: '21120123130077', tugas: 'Tugas Akhir Praktikum PPB', avatar: '' });
 
   useEffect(() => {
@@ -328,5 +328,8 @@ export const ProfilePage = ({ offline }) => {
     </div>
   );
 };
+
+// Named exports at the bottom so bundlers (Rollup/esbuild) can statically analyze them
+export { DetailPage, ProfilePage };
 
   // Exports are declared inline above as named exports; no extra export statement needed.
